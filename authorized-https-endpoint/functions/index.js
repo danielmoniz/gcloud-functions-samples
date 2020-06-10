@@ -36,7 +36,8 @@ const validateFirebaseIdToken = async (req, res, next) => {
         'Make sure you authorize your request by providing the following HTTP header:',
         'Authorization: Bearer <Firebase ID Token>',
         'or by passing a "__session" cookie.');
-    res.status(403).send('Unauthorized');
+    // res.status(403).send('Unauthorized');
+    unauthorize(req, res);
     return;
   }
 
@@ -51,7 +52,8 @@ const validateFirebaseIdToken = async (req, res, next) => {
     idToken = req.cookies.__session;
   } else {
     // No cookie
-    res.status(403).send('Unauthorized');
+    // res.status(403).send('Unauthorized');
+    unauthorize(req, res);
     return;
   }
 
@@ -63,9 +65,18 @@ const validateFirebaseIdToken = async (req, res, next) => {
     return;
   } catch (error) {
     console.error('Error while verifying Firebase ID token:', error);
+    // res.status(403).send('Unauthorized');
+    unauthorize(req, res);
+    return;
+  }
+};
+
+const unauthorize = (req, res) => {
+  if (req.xhr) {
     res.status(403).send('Unauthorized');
     return;
   }
+  res.redirect('/');
 };
 
 app.use(cors);
