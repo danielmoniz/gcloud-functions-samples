@@ -72,7 +72,10 @@ app.use(cors);
 app.use(cookieParser);
 app.use(validateFirebaseIdToken);
 app.get('/hello', (req, res) => {
-  res.send(`Hello ${req.user.name}`);
+  res.send(`Hello ${req.user.name}!`);
+});
+app.get('/goodbye', (req, res) => {
+  res.send(`Goodbye, ${req.user.name}.`);
 });
 
 // This HTTPS endpoint can only be accessed by your Firebase Users.
